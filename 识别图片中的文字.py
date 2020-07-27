@@ -10,7 +10,7 @@ from PIL import Image
 
 __author__ = 'admin'
 
-img = Image.open(r'D:\Felix\pythonProject\images\picToWord\图片转文字_08.jpg')
+img = Image.open(r'D:\Felix\学习\PyPro\pythonProject\images\picToWord\图片转文字_08.jpg')
 print(pytesseract.image_to_string(img))
 
 
