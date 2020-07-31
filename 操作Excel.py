@@ -12,7 +12,6 @@ from xlsxwriter import *  # 写入Excel
 
 
 def write_excel_openpyxl():
-    print('创建工作簿')
     # 创建工作簿
     wb = openpyxl.Workbook()
     # 创建Sheet
@@ -27,7 +26,7 @@ def write_excel_xlsxwriter1():
     work_book = None
     if not os.path.exists('Excel/chat.xlsx'):
         os.mkdir('Excel')  # 创建一个文件夹
-        work_book = Workbook('Excel/chat.xlsx')  # 创建一个excel文件
+    work_book = Workbook('Excel/chat.xlsx')  # 创建一个excel文件
     worksheet = work_book.add_worksheet(u'TEST')  # 在文件中创建一个名为TEST的sheet,不加名字默认为sheet1
 
     worksheet.set_column('A:A', 20)  # 设置第一列宽度为20像素
@@ -44,6 +43,6 @@ def write_excel_xlsxwriter1():
 
 
 if __name__ == '__main__':
-    # write_excel_openpyxl()
-    write_excel_xlsxwriter1()
+    write_excel_openpyxl()
+    # write_excel_xlsxwriter1()
     print("写入成功!")
