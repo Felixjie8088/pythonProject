@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: tkmail
+Version: 4.1.0
+Summary: Tool send email via SMTP (with retry)
+Home-page: https://git.teko.vn/data/libs/smtp-mail
+Author: tuan.dv, nhat.nv
+Author-email: tuan.dv@teko.vn, nhat.nv@teko.vn
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+
+### Simple Usage
+
+```python
+from tkmail import Email
+
+email = Email(
+  host='smtp.gmail.com', 
+  port=587, 
+  use_tls=True,
+  username='demo@gmail.com',
+  password='hidden_password',
+  to='anonymous@gmail.com',
+  cc='somebody@gmail.com',
+  bcc='another@gmail.com',
+  subject='Demo sending email',
+).html('<h1>Demo sending email</h1>').send().retry(times=5)
+```
+
