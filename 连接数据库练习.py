@@ -61,6 +61,7 @@ def DBWrite(connect, sql_query):
 
 
 # 执行对数据库的读操作-sql
+
 def DBRead(connect, sql_query):
     cursor = connect.cursor()
     result = None
