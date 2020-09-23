@@ -42,5 +42,5 @@ class GUI(object):
 if __name__ == '__main__':
     root = tkinter.Tk()  # 创建窗口对象的背景色
     gui = GUI(root)
-    gui.set_button(HelloWorld)
+    gui.set_button(gui.HelloWorld)
     root.mainloop()  # 进入消息循环
