@@ -13,12 +13,12 @@ SECRET_KEY = '544ca4657ba8002e3dea3ac2f5fdd241'
 client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
 print(client)
 
-s = '你好啊，我叫Felix，你叫什么'
+s = '你好啊，我叫Felix，你叫什么,小宝贝'
 speak = client.synthesis(s, 'zh', 1, {
-    'vol': 5,  # 音量，取值0-15，默认5位中音量
+    'vol': 7,  # 音量，取值0-15，默认5位中音量
     'per': 0,
     'spd': 6,  # 语速，取值0-9，默认5位中语速
-    'pit': 3  # 音调，取值0-9，默认5位中音调
+    'pit': 6  # 音调，取值0-9，默认5位中音调
 })
 print(speak)
 instance = isinstance(speak, dict)
