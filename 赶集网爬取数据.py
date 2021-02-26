@@ -20,7 +20,7 @@ class ganji():
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.74',
             'Host': 'su.ganji.com',
-            'cookie': 'ganji_uuid=9702908012721581993054; ganji_xuuid=4b100698-c9ae-417e-c3b3-fe68ede3a77a.1614318998236; _gl_tracker=%7B%22ca_source%22%3A%22www.baidu.com%22%2C%22ca_name%22%3A%22-%22%2C%22ca_kw%22%3A%22-%22%2C%22ca_id%22%3A%22-%22%2C%22ca_s%22%3A%22seo_baidu%22%2C%22ca_n%22%3A%22-%22%2C%22ca_i%22%3A%22-%22%2C%22sid%22%3A50198259394%7D; GANJISESSID=l3oi0or525voh4t36cqgkrdb0d; lg=1; citydomain=su; __utmc=32156897; __utmz=32156897.1614319005.1.1.utmcsr=su.ganji.com|utmccn=(referral)|utmcmd=referral|utmcct=/; gj_footprint=%5B%5B%22%5Cu79df%5Cu623f%22%2C%22http%3A%5C%2F%5C%2Fsu.ganji.com%5C%2Ffang1%5C%2F%22%5D%5D; __utma=32156897.1154073950.1614319005.1614319005.1614323715.2'
+            'cookie': 'ganji_uuid=9702908012721581993054; ganji_xuuid=4b100698-c9ae-417e-c3b3-fe68ede3a77a.1614318998236; _gl_tracker=%7B%22ca_source%22%3A%22www.baidu.com%22%2C%22ca_name%22%3A%22-%22%2C%22ca_kw%22%3A%22-%22%2C%22ca_id%22%3A%22-%22%2C%22ca_s%22%3A%22seo_baidu%22%2C%22ca_n%22%3A%22-%22%2C%22ca_i%22%3A%22-%22%2C%22sid%22%3A50198259394%7D; GANJISESSID=l3oi0or525voh4t36cqgkrdb0d; lg=1; citydomain=su; __utmc=32156897; __utmz=32156897.1614319005.1.1.utmcsr=su.ganji.com|utmccn=(referral)|utmcmd=referral|utmcct=/; gj_footprint=%5B%5B%22%5Cu79df%5Cu623f%22%2C%22http%3A%5C%2F%5C%2Fsu.ganji.com%5C%2Ffang1%5C%2F%22%5D%5D; __utma=32156897.1154073950.1614319005.1614323715.1614329720.3; ganji_login_act=1614331662609; __utmb=32156897.3.10.1614329720'
         }
         self.encoding = 'UTF-8'
 
@@ -36,45 +36,51 @@ class ganji():
         .+?<span.+?<span>(.+?)</span>                          # 获取房源朝向
         .+?<span.+?<span.+?last.+?>(.+?)</span>                # 获取房源装修类型
         .+?<dd.+?dd-item.+?<span.+?area.+?<a.+?address-eara.+?>(.+?)</a>(.+?)<a.+?<span.+?address-eara.+?>(.+?)</span>      # 获取房源地址
+        .+?<div.+?price.+?<span.+?>(.+?)</span><span.+?yue.+?>(.+?)</span>      # 获取房源价格
         ''', html, re.VERBOSE | re.DOTALL)
+
         # 循环将房源信息取出，字典中
         for house in div_houses:
             # 初始化字典
             house_info = {}
-            house_title, house_type, house_size, house_orientation, house_decoration_type, house_address, spacer, house_address_detail = house
+            house_title, house_type, house_size, house_orientation, house_decoration_type, house_address, spacer, house_address_detail, house_price, price_unit = house
             house_info['house_title'] = house_title
             house_info['house_type'] = house_type
             house_info['house_size'] = house_size
             house_info['house_orientation'] = house_orientation
             house_info['house_decoration_type'] = house_decoration_type
-            house_info['house_address'] = house_address
-            house_info['spacer'] = spacer.replace('\n', '').strip()
-            house_info['house_address_detail'] = house_address_detail
+            house_info['house_address'] = house_address + spacer.replace('\n', '').strip() + house_address_detail
+            house_info['house_price'] = house_price + '' + price_unit
             house_list.append(house_info)
 
         return house_list
 
     # 开始运行
     def run(self):
-        with(open(r'./Excel/ganjifangyuanxinxi.csv', 'a', encoding='UTF-8')) as f:
+        with(open(r'./Excel/ganjifangyuanxinxi.csv', 'w', encoding='UTF-8')) as f:
             # 分页获取内容
             for i in range(1, 10, 1):
                 self.page_url = 'http://su.ganji.com/zufang/pn{}/'.format(i)
                 houses = self.get_houses()
                 # print(houses)
                 for house in houses:
-                    f.writelines('{}{}{}{}{}{}{}{}'.format(house['house_title']
-                                                           , house['house_type']
-                                                           , house['house_size']
-                                                           , house['house_orientation']
-                                                           , house['house_decoration_type']
-                                                           , house['house_address']
-                                                           , house['spacer']
-                                                           , house['house_address_detail']
-                                                           ))
-                    print('写入成功！')
+                    f.writelines('''房源标题：{}
+                        \n房源户型：{}
+                        \n房源面积：{}
+                        \n房源朝向：{}
+                        \n房源装修类型：{}
+                        \n房源详细地址：{}
+                        \n房源价格：{}\n\n'''.format(house['house_title']
+                                            , house['house_type']
+                                            , house['house_size']
+                                            , house['house_orientation']
+                                            , house['house_decoration_type']
+                                            , house['house_address']
+                                            , house['house_price']
+                                            ))
+                print('写入成功！')
                 # 间隔1s获取
-                time.sleep(1)
+                time.sleep(5)
 
 
 if __name__ == '__main__':
